@@ -1,12 +1,19 @@
 const express = require("express");
+const connectDB = require("./config/db");
+const patientRoutes = require("./routes/patients");
+
 const app = express();
 
+connectDB();
 app.use(express.json());
 
-app.get("/api/test", (req, res) => {
-  res.json({ message: "API works" });
+app.use("/api/patients", patientRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Medical laboratory system API");
 });
 
-app.listen(3000, () => {
-  console.log("Server started");
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
