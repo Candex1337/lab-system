@@ -12,7 +12,7 @@
 - Custom error class (AppError)
 - Global error handler
 ### 06.04.26
-#№ Обзор кода:
+## Обзор кода:
 - added dev/prod configuration
 - moved environment settings to config
 - improved flexibility of application setup
