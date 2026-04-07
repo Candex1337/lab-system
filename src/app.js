@@ -1,9 +1,9 @@
 const express = require("express");
 const connectDB = require("./config/db");
+const config = require("./config/env");
 const patientRoutes = require("./routes/patients");
 
 const app = express();
-const PORT = 3000;
 
 connectDB();
 
@@ -11,10 +11,9 @@ app.use(express.json());
 app.use("/api/patients", patientRoutes);
 
 app.get("/", (req, res) => {
-  res.status(200).send("Medical laboratory system API");
+  res.status(200).send(`Medical laboratory system API (${config.env})`);
 });
 
-// Глобальный обработчик ошибок
 app.use((err, req, res, next) => {
   console.error("Global error:", err.message);
 
@@ -23,6 +22,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(config.port, () => {
+  console.log(`Server running on port ${config.port} in ${config.env} mode`);
 });
