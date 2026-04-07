@@ -1,12 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const AppError = require("../utils/AppError");
+const Patient = require("../models/Patient");
 
 router.get("/", async (req, res) => {
   try {
-    return res.status(200).json({
-      message: "Patients list received successfully",
-    });
+    const patients = await Patient.find().sort({ createdAt: -1 });
+    return res.status(200).json(patients);
   } catch (error) {
     console.error("Error fetching patients:", error.message);
     return res.status(500).json({ error: "Internal server error" });
@@ -15,19 +14,24 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    if (!req.body.fullName) {
-      throw new AppError("Full name is required", 400);
+    const { fullName, birthDate, phone } = req.body;
+
+    if (!fullName || !birthDate || !phone) {
+      return res.status(400).json({
+        error: "fullName, birthDate and phone are required",
+      });
     }
 
-    return res.status(201).json({
-      message: "Patient created successfully",
+    const patient = await Patient.create({
+      fullName,
+      birthDate,
+      phone,
     });
+
+    return res.status(201).json(patient);
   } catch (error) {
     console.error("Error creating patient:", error.message);
-
-    return res.status(error.statusCode || 500).json({
-      error: error.message || "Internal server error",
-    });
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 

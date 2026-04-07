@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Медицинская лаборатория</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    form {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+    .card {
+      border: 1px solid #ccc;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Система управления медицинской лабораторией</h1>
+
+  <form id="patientForm">
+    <input type="text" id="fullName" placeholder="ФИО" required />
+    <input type="date" id="birthDate" required />
+    <input type="text" id="phone" placeholder="Телефон" required />
+    <button type="submit">Добавить пациента</button>
+  </form>
+
+  <h2>Список пациентов</h2>
+  <div id="patientsList"></div>
+
+  <script>
+    const form = document.getElementById("patientForm");
+    const patientsList = document.getElementById("patientsList");
+
+    async function loadPatients() {
+      const res = await fetch("/api/patients");
+      const patients = await res.json();
+
+      patientsList.innerHTML = "";
+
+      patients.forEach((patient) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <strong>${patient.fullName}</strong><br>
+          Дата рождения: ${new Date(patient.birthDate).toLocaleDateString()}<br>
+          Телефон: ${patient.phone}
+        `;
+        patientsList.appendChild(card);
+      });
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const fullName = document.getElementById("fullName").value;
+      const birthDate = document.getElementById("birthDate").value;
+      const phone = document.getElementById("phone").value;
+
+      await fetch("/api/patients", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ fullName, birthDate, phone })
+      });
+
+      form.reset();
+      loadPatients();
+    });
+
+    loadPatients();
+  </script>
+</body>
+</html>
