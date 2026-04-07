@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
-
-const DB_URL = "mongodb://127.0.0.1:27017/medical_lab";
+const config = require("./env");
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(DB_URL);
-    console.log("MongoDB connected successfully");
+    await mongoose.connect(config.dbUrl);
+    console.log(`MongoDB connected in ${config.env} mode`);
   } catch (error) {
     console.error("Database connection error:", error.message);
     process.exit(1);
