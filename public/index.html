@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Система управления медицинской лабораторией</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-badge">ML</div>
+        <div>
+          <h2>Мед. лаборатория</h2>
+          <p>Lab Management System</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-link active" data-section="patients">Пациенты</button>
+        <button class="nav-link" data-section="appointments">Назначение анализов</button>
+        <button class="nav-link" data-section="results">Результаты</button>
+        <button class="nav-link" data-section="protocols">Протоколы</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1>Система управления медицинской лабораторией</h1>
+          <p>Регистрация пациентов, анализы, результаты, протоколы и печать бланков</p>
+        </div>
+      </header>
+
+      <section id="patients" class="content-section active">
+        <div class="section-head">
+          <h2>Регистрация пациентов</h2>
+          <p>Добавление и просмотр пациентов</p>
+        </div>
+
+        <div class="grid two-cols">
+          <div class="card">
+            <h3>Добавить пациента</h3>
+            <form id="patientForm" class="form">
+              <div class="form-group">
+                <label for="fullName">ФИО</label>
+                <input type="text" id="fullName" placeholder="Иванов Иван Иванович" required />
+              </div>
+
+              <div class="form-group">
+                <label for="birthDate">Дата рождения</label>
+                <input type="date" id="birthDate" required />
+              </div>
+
+              <div class="form-group">
+                <label for="phone">Телефон</label>
+                <input type="text" id="phone" placeholder="+7 900 000-00-00" required />
+              </div>
+
+              <button type="submit" class="btn btn-primary">Добавить пациента</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <h3>Список пациентов</h3>
+            <div id="patientsList" class="list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="appointments" class="content-section">
+        <div class="section-head">
+          <h2>Назначение анализов</h2>
+          <p>Оформление направлений на исследования</p>
+        </div>
+
+        <div class="grid two-cols">
+          <div class="card">
+            <h3>Создать назначение</h3>
+            <form id="appointmentForm" class="form">
+              <div class="form-group">
+                <label for="appointmentPatient">Пациент</label>
+                <select id="appointmentPatient" required></select>
+              </div>
+
+              <div class="form-group">
+                <label for="testName">Название анализа</label>
+                <input type="text" id="testName" placeholder="Общий анализ крови" required />
+              </div>
+
+              <div class="form-group">
+                <label for="appointmentDate">Дата назначения</label>
+                <input type="date" id="appointmentDate" required />
+              </div>
+
+              <button type="submit" class="btn btn-primary">Назначить анализ</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <h3>Список назначений</h3>
+            <div id="appointmentsList" class="list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="results" class="content-section">
+        <div class="section-head">
+          <h2>Сбор результатов</h2>
+          <p>Ввод и просмотр результатов исследований</p>
+        </div>
+
+        <div class="grid two-cols">
+          <div class="card">
+            <h3>Добавить результат</h3>
+            <form id="resultForm" class="form">
+              <div class="form-group">
+                <label for="resultPatient">Пациент</label>
+                <select id="resultPatient" required></select>
+              </div>
+
+              <div class="form-group">
+                <label for="resultTest">Анализ</label>
+                <input type="text" id="resultTest" placeholder="Общий анализ крови" required />
+              </div>
+
+              <div class="form-group">
+                <label for="resultValue">Результат</label>
+                <input type="text" id="resultValue" placeholder="Гемоглобин: 130 г/л" required />
+              </div>
+
+              <div class="form-group">
+                <label for="resultComment">Комментарий</label>
+                <textarea id="resultComment" rows="3" placeholder="Дополнительная информация"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Сохранить результат</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <h3>Список результатов</h3>
+            <div id="resultsList" class="list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="protocols" class="content-section">
+        <div class="section-head">
+          <h2>Формирование протоколов</h2>
+          <p>Просмотр итогового документа и печать бланка</p>
+        </div>
+
+        <div class="grid two-cols">
+          <div class="card">
+            <h3>Сформировать протокол</h3>
+            <form id="protocolForm" class="form">
+              <div class="form-group">
+                <label for="protocolPatient">Пациент</label>
+                <select id="protocolPatient" required></select>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Сформировать протокол</button>
+            </form>
+
+            <button id="printProtocolBtn" class="btn btn-secondary">Печать бланка</button>
+          </div>
+
+          <div class="card">
+            <h3>Протокол исследования</h3>
+            <div id="protocolPreview" class="protocol-preview">
+              <p class="muted">Выберите пациента и сформируйте протокол.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const sections = document.querySelectorAll(".content-section");
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    const patientForm = document.getElementById("patientForm");
+    const patientsList = document.getElementById("patientsList");
+
+    const appointmentForm = document.getElementById("appointmentForm");
+    const appointmentsList = document.getElementById("appointmentsList");
+
+    const resultForm = document.getElementById("resultForm");
+    const resultsList = document.getElementById("resultsList");
+
+    const protocolForm = document.getElementById("protocolForm");
+    const protocolPreview = document.getElementById("protocolPreview");
+    const printProtocolBtn = document.getElementById("printProtocolBtn");
+
+    const appointmentPatient = document.getElementById("appointmentPatient");
+    const resultPatient = document.getElementById("resultPatient");
+    const protocolPatient = document.getElementById("protocolPatient");
+
+    let patients = [];
+    let appointments = [];
+    let results = [];
+
+    navLinks.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        navLinks.forEach((link) => link.classList.remove("active"));
+        sections.forEach((section) => section.classList.remove("active"));
+
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.section).classList.add("active");
+      });
+    });
+
+    function renderPatientOptions() {
+      const options = patients.length
+        ? patients.map((patient) => `<option value="${patient._id}">${patient.fullName}</option>`).join("")
+        : `<option value="">Нет пациентов</option>`;
+
+      appointmentPatient.innerHTML = options;
+      resultPatient.innerHTML = options;
+      protocolPatient.innerHTML = options;
+    }
+
+    function renderPatients() {
+      if (!patients.length) {
+        patientsList.innerHTML = '<p class="muted">Пациенты пока не добавлены.</p>';
+        renderPatientOptions();
+        return;
+      }
+
+      patientsList.innerHTML = patients.map((patient) => `
+        <div class="item">
+          <div class="item-title">${patient.fullName}</div>
+          <div class="item-meta">Дата рождения: ${new Date(patient.birthDate).toLocaleDateString()}</div>
+          <div class="item-meta">Телефон: ${patient.phone}</div>
+        </div>
+      `).join("");
+
+      renderPatientOptions();
+    }
+
+    function renderAppointments() {
+      if (!appointments.length) {
+        appointmentsList.innerHTML = '<p class="muted">Назначений пока нет.</p>';
+        return;
+      }
+
+      appointmentsList.innerHTML = appointments.map((item) => `
+        <div class="item">
+          <div class="item-title">${item.testName}</div>
+          <div class="item-meta">Пациент: ${item.patientName}</div>
+          <div class="item-meta">Дата: ${new Date(item.appointmentDate).toLocaleDateString()}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderResults() {
+      if (!results.length) {
+        resultsList.innerHTML = '<p class="muted">Результатов пока нет.</p>';
+        return;
+      }
+
+      resultsList.innerHTML = results.map((item) => `
+        <div class="item">
+          <div class="item-title">${item.testName}</div>
+          <div class="item-meta">Пациент: ${item.patientName}</div>
+          <div class="item-meta">Результат: ${item.value}</div>
+          <div class="item-meta">Комментарий: ${item.comment || "—"}</div>
+        </div>
+      `).join("");
+    }
+
+    async function loadPatients() {
+      try {
+        const res = await fetch("/api/patients");
+        if (!res.ok) throw new Error("Ошибка загрузки пациентов");
+        patients = await res.json();
+        renderPatients();
+      } catch (error) {
+        patientsList.innerHTML = '<p class="muted">Не удалось загрузить пациентов.</p>';
+      }
+    }
+
+    patientForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const fullName = document.getElementById("fullName").value;
+      const birthDate = document.getElementById("birthDate").value;
+      const phone = document.getElementById("phone").value;
+
+      try {
+        const res = await fetch("/api/patients", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fullName, birthDate, phone })
+        });
+
+        if (!res.ok) throw new Error("Ошибка добавления пациента");
+
+        patientForm.reset();
+        await loadPatients();
+      } catch (error) {
+        alert("Не удалось добавить пациента");
+      }
+    });
+
+    appointmentForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const patientId = appointmentPatient.value;
+      const patient = patients.find((p) => p._id === patientId);
+      const testName = document.getElementById("testName").value;
+      const appointmentDate = document.getElementById("appointmentDate").value;
+
+      if (!patient) {
+        alert("Сначала добавьте пациента");
+        return;
+      }
+
+      appointments.unshift({
+        id: Date.now().toString(),
+        patientId,
+        patientName: patient.fullName,
+        testName,
+        appointmentDate
+      });
+
+      appointmentForm.reset();
+      renderAppointments();
+    });
+
+    resultForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const patientId = resultPatient.value;
+      const patient = patients.find((p) => p._id === patientId);
+      const testName = document.getElementById("resultTest").value;
+      const value = document.getElementById("resultValue").value;
+      const comment = document.getElementById("resultComment").value;
+
+      if (!patient) {
+        alert("Сначала добавьте пациента");
+        return;
+      }
+
+      results.unshift({
+        id: Date.now().toString(),
+        patientId,
+        patientName: patient.fullName,
+        testName,
+        value,
+        comment
+      });
+
+      resultForm.reset();
+      renderResults();
+    });
+
+    protocolForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const patientId = protocolPatient.value;
+      const patient = patients.find((p) => p._id === patientId);
+      const patientResults = results.filter((item) => item.patientId === patientId);
+
+      if (!patient) {
+        protocolPreview.innerHTML = '<p class="muted">Пациент не найден.</p>';
+        return;
+      }
+
+      if (!patientResults.length) {
+        protocolPreview.innerHTML = '<p class="muted">Для выбранного пациента нет результатов.</p>';
+        return;
+      }
+
+      protocolPreview.innerHTML = `
+        <div class="protocol-sheet">
+          <h4>Протокол лабораторного исследования</h4>
+          <p><strong>Пациент:</strong> ${patient.fullName}</p>
+          <p><strong>Дата рождения:</strong> ${new Date(patient.birthDate).toLocaleDateString()}</p>
+          <p><strong>Телефон:</strong> ${patient.phone}</p>
+          <hr />
+          ${patientResults.map((item) => `
+            <div class="protocol-row">
+              <strong>${item.testName}</strong>
+              <div>Результат: ${item.value}</div>
+              <div>Комментарий: ${item.comment || "—"}</div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    });
+
+    printProtocolBtn.addEventListener("click", () => {
+      window.print();
+    });
+
+    loadPatients();
+    renderAppointments();
+    renderResults();
+  </script>
+</body>
+</html>

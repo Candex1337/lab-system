@@ -1,0 +1,30 @@
+{
+  "name": "lab-system",
+  "version": "1.0.0",
+  "description": "Информационная система для автоматизации работы медицинской лаборатории.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Candex1337/lab-system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Candex1337/lab-system/issues"
+  },
+  "homepage": "https://github.com/Candex1337/lab-system#readme",
+  "dependencies": {
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "mongoose": "^9.4.1"
+  }
+}
